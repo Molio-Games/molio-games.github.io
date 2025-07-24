@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DualityX - Neon Space Breaker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050518;
+            color: #fff;
+            font-family: 'Exo 2', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Звездный фон с помощью CSS */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 25px 5px, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 50px 25px, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 125px 20px, white, rgba(255,255,255,0)),
+                radial-gradient(1.5px 1.5px at 50px 75px, white, rgba(255,255,255,0)),
+                radial-gradient(2px 2px at 175px 135px, white, rgba(255,255,255,0)),
+                radial-gradient(2px 2px at 20px 195px, white, rgba(255,255,255,0)),
+                radial-gradient(2.5px 2.5px at 100px 150px, white, rgba(255,255,255,0)),
+                radial-gradient(3px 3px at 80px 225px, white, rgba(255,255,255,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            z-index: -2;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        /* Стилизованные планеты с помощью CSS */
+        .planet {
+            position: fixed;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .planet1 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 30%, #7a57d1, #3a246d);
+            box-shadow: inset -30px -30px 50px rgba(0,0,0,0.5), 0 0 20px rgba(122, 87, 209, 0.5);
+            top: 15%;
+            right: -50px;
+        }
+        
+        .planet2 {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #39c2e2, #1d6277);
+            box-shadow: inset -20px -20px 40px rgba(0,0,0,0.5), 0 0 15px rgba(57, 194, 226, 0.5);
+            bottom: 10%;
+            left: -30px;
+        }
+        
+        .planet3 {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 30% 30%, #e27539, #772d1d);
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5), 0 0 10px rgba(226, 117, 57, 0.5);
+            top: 60%;
+            right: 15%;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: #3af;
+            text-shadow: 0 0 15px rgba(51,170,255,0.7), 0 0 30px rgba(51,170,255,0.4);
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #bdf;
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-shadow: 0 0 10px rgba(51,170,255,0.5);
+        }
+        
+        .app-link {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .app-link a {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #3af, #5183ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(51,170,255,0.6);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        .app-link a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(51,170,255,0.9);
+        }
+        
+        /* Улучшенная секция с трейлером */
+        .intro-section {
+            background: rgba(20, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(51,170,255,0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(51,170,255,0.2);
+            line-height: 1.7;
+        }
+        
+        .intro-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #3af;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(51,170,255,0.5);
+            text-align: center;
+        }
+        
+        .intro-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+        }
+        
+        .trailer-embed {
+            flex: 0 0 auto;
+            width: 220px; /* Фиксированная ширина для трейлера */
+        }
+        
+        .trailer-wrapper {
+            position: relative;
+            padding-bottom: 177.77%; /* Соотношение 9:16 для вертикального видео */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(51,170,255,0.4);
+        }
+        
+        .trailer-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .intro-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 390px; /* Высота соответствует трейлеру */
+        }
+        
+        .intro-text p {
+            margin: 0 0 15px;
+            color: #d5e5ff;
+        }
+        
+        .intro-text p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .description {
+            background: rgba(20, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 50px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(51,170,255,0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(51,170,255,0.2);
+            line-height: 1.7;
+        }
+        
+        .description p {
+            margin-bottom: 20px;
+            color: #d5e5ff;
+        }
+        
+        .description h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #3af;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .description ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .description li {
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            color: #5bf;
+            font-weight: bold;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .feature-card {
+            background: rgba(20, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(51,170,255,0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(51,170,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4), 0 0 30px rgba(51,170,255,0.3);
+        }
+        
+        .feature-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #3af;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #5bf;
+        }
+        
+        .feature-text {
+            color: #bdf;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            color: #8aa;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(51,170,255,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .intro-content {
+                flex-direction: column;
+            }
+            
+            .trailer-embed {
+                width: 220px;
+                margin: 0 auto;
+            }
+            
+            .intro-text {
+                height: auto;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .planet1 {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .planet2 {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .planet3 {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="planet planet1"></div>
+    <div class="planet planet2"></div>
+    <div class="planet planet3"></div>
+    
+    <div class="container">
+        <header>
+            <h1>DUALITYX</h1>
+            <p class="tagline">EXPERIENCE THE ULTIMATE COSMIC DUEL!</p>
+        </header>
+        
+        <div class="app-link">
+            <a href="https://play.google.com/store/apps/details?id=com.molio.dualityx">DOWNLOAD ON GOOGLE PLAY</a>
+        </div>
+        
+        <!-- Улучшенная секция с трейлером -->
+        <div class="intro-section">
+            <h2>GAMEPLAY TRAILER</h2>
+            <div class="intro-content">
+                <div class="trailer-embed">
+                    <div class="trailer-wrapper">
+                        <iframe src="https://www.youtube.com/embed/KhsWt72EdGg" title="DualityX Gameplay Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="intro-text">
+                    <p>DualityX transforms the classic arkanoid formula into an exciting competitive experience with stunning neon visuals set against the vastness of space.</p>
+                    
+                    <p>Challenge friends in intense head-to-head matches or test your skills against an adaptive AI opponent that evolves as you improve.</p>
+                    
+                    <p>With color-changing ball mechanics and special blocks with unique effects, every match brings new strategic possibilities.</p>
+                    
+                    <p>The mesmerizing neon aesthetics and dynamic cosmic backgrounds create an immersive atmosphere, enhanced by atmospheric music.</p>
+                    
+                    <p>Whether you're looking for quick competitive matches with friends or a challenging solo experience, DualityX delivers addictive gameplay wrapped in a stunning neon package.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="description">
+            <h2>🎮 DUAL GAMEPLAY EXPERIENCES:</h2>
+            <ul>
+                <li><span class="highlight">Two-Player Mode:</span> Face off against a friend on the same device in intense head-to-head matches where strategy meets reflexes</li>
+                <li><span class="highlight">Single-Player Mode:</span> Challenge yourself against an adaptive AI opponent that evolves as your skills improve</li>
+            </ul>
+            
+            <h2>🌟 DISTINCTIVE FEATURES:</h2>
+            <ul>
+                <li>Mesmerizing neon aesthetics with dynamic cosmic backgrounds that bring the space theme to life</li>
+                <li>Color-changing ball mechanics that add strategic depth to the traditional arkanoid experience</li>
+                <li>Progressive level design with unique patterns and challenges that test different skills</li>
+                <li>Special blocks with surprising effects that can turn the tide of any match</li>
+                <li>Star rating system that rewards mastery and encourages replay value</li>
+                <li>Smooth, responsive controls optimized for touchscreens</li>
+                <li>Immersive sound design with atmospheric music and satisfying effect sounds</li>
+            </ul>
+            
+            <h2>✨ POLISHED EXPERIENCE:</h2>
+            <ul>
+                <li>Seamless performance across various mobile devices</li>
+                <li>Intuitive interface that gets you into the action quickly</li>
+                <li>Carefully balanced difficulty progression</li>
+            </ul>
+            
+            <p>Whether you're looking for quick competitive matches with friends or a challenging solo experience, DualityX delivers addictive gameplay wrapped in a stunning neon package. Can you master the cosmic arkanoid and become the ultimate champion?</p>
+            
+            <p><strong>Download now and light up the cosmos with your skills!</strong></p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">COMPETITIVE GAMEPLAY</h3>
+                <p class="feature-text">Challenge friends in head-to-head matches or test your skills against adaptive AI in this cosmic brick-breaking duel.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3 class="feature-title">STUNNING VISUALS</h3>
+                <p class="feature-text">Immerse yourself in mesmerizing neon aesthetics and dynamic cosmic backgrounds that bring the space theme to life.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3 class="feature-title">INTUITIVE CONTROLS</h3>
+                <p class="feature-text">Experience smooth, responsive gameplay optimized for touchscreens that gets you into the action quickly.</p>
+            </div>
+        </div>
+        
+        <div class="app-link">
+            <a href="https://play.google.com/store/apps/details?id=com.molio.dualityx">DOWNLOAD NOW</a>
+        </div>
+        
+        <footer>
+            © 2025 DualityX. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>
